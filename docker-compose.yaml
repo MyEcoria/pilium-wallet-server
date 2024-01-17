@@ -40,12 +40,14 @@ services:
             - DATABASE_URL=postgres://postgres:postgres@db:5432/natrium
             - REDIS_HOST=redis
             - GOPRIVATE=github.com/appditto
-            - RPC_URL=https://app.natrium.io/api
+            - RPC_URL=https://api.raione.cc/api
+            - WORK_URL=https://api.raione.cc/api
+            - NODE_WS_URL=wss://ws.raione.cc/ws
         ports:
             - '127.0.0.1:3003:3000'
         build:
             context: .
-            dockerfile: Dockerfile.dev
+            dockerfile: Dockerfile
         volumes:
             - $PWD:/app:cached
         restart: on-failure
