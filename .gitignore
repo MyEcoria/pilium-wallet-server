@@ -49,3 +49,4 @@ docs/_build
 venv/
 .env
 .vscode
+natrium-server

@@ -15,7 +15,7 @@ const EncodeNano = "13456789abcdefghijkmnopqrstuwxyz"
 var NanoEncoding = base32.NewEncoding(EncodeNano)
 
 const bananoRegexStr = "(?:ban)(?:_)(?:1|3)(?:[13456789abcdefghijkmnopqrstuwxyz]{59})"
-const nanoRegexStr = "(?:xrb|nano)(?:_)(?:1|3)(?:[13456789abcdefghijkmnopqrstuwxyz]{59})"
+const nanoRegexStr = "(?:xrb|nano|xro)(?:_)(?:1|3)(?:[13456789abcdefghijkmnopqrstuwxyz]{59})"
 
 var bananoRegex = regexp.MustCompile(bananoRegexStr)
 var nanoRegex = regexp.MustCompile(nanoRegexStr)
@@ -39,7 +39,7 @@ func ValidateAddress(account string, bananoMode bool) bool {
 func AddressToPub(account string) (public_key []byte, err error) {
 	address := string(account)
 
-	if address[:4] == "xrb_" || address[:4] == "ban_" {
+	if address[:4] == "xro_" || address[:4] == "ban_" {
 		address = address[4:]
 	} else if address[:5] == "nano_" {
 		address = address[5:]

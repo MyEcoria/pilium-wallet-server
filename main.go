@@ -330,12 +330,13 @@ func main() {
 
 	s.Every(60).Seconds().Do(func() {
 		// BTC and Nano price
-		btcPrice, err := database.GetRedisDB().Hget("prices", fmt.Sprintf("coingecko:%s-btc", pricePrefix))
-		if err != nil {
-			klog.Errorf("Error getting btc price in cron: %v", err)
-			return
-		}
-		btcPriceFloat, err := strconv.ParseFloat(btcPrice, 64)
+		//btcPrice, err := database.GetRedisDB().Hget("prices", fmt.Sprintf("coingecko:%s-btc", pricePrefix))
+		//if err != nil {
+		//	klog.Errorf("Error getting btc price in cron: %v", err)
+		//	return
+		//}
+		//btcPriceFloat, err := strconv.ParseFloat(btcPrice, 64)
+		btcPriceFloat, err := strconv.ParseFloat("16532.54", 64)
 		if err != nil {
 			klog.Errorf("Error parsing btc price in cron: %v", err)
 			return

@@ -207,8 +207,8 @@ func (c *Client) readPump() {
 			// Force nano_ address
 			if !c.Hub.BananoMode {
 				// Ensure account has nano_ address
-				if strings.HasPrefix(subscribeRequest.Account, "xrb_") {
-					subscribeRequest.Account = fmt.Sprintf("nano_%s", strings.TrimPrefix(subscribeRequest.Account, "xrb_"))
+				if strings.HasPrefix(subscribeRequest.Account, "xro_") {
+					subscribeRequest.Account = fmt.Sprintf("xro_%s", strings.TrimPrefix(subscribeRequest.Account, "xro_"))
 				}
 			}
 
