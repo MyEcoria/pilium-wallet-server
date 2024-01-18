@@ -48,8 +48,6 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        volumes:
-            - $PWD:/app:cached
         restart: always
         stdin_open: true
         tty: true
