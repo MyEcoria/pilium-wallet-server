@@ -1,21 +1,17 @@
-FROM --platform=$BUILDPLATFORM golang:1.19-alpine AS build
+# Utilisez une image de base contenant Go
+FROM golang:latest
 
-WORKDIR /src
-ARG TARGETOS TARGETARCH
-RUN --mount=target=. \
-    --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/go/pkg \
-    GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /out/natrium-server
+# Définissez le répertoire de travail dans le conteneur
+WORKDIR /app
 
-FROM alpine
+# Copiez les fichiers source dans le conteneur
+COPY . .
 
-RUN apk add --no-cache ca-certificates
+# Compilez le programme Go
+RUN go build -o natrium-server
 
-# Copy binary
-COPY --from=build /out/natrium-server /bin
+# Exposez le port 3000
+EXPOSE 3000
 
-EXPOSE 8080
-
-ADD alerts.json .
-
-CMD ["natrium-server"]
+# Commande pour exécuter le programme après la compilation
+CMD ["./natrium-server"]

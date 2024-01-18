@@ -44,14 +44,13 @@ services:
             - WORK_URL=https://api.raione.cc/api
             - NODE_WS_URL=wss://ws.raione.cc/ws
         ports:
-            - '127.0.0.1:3003:3000'
+            - '3003:3000'
         build:
             context: .
             dockerfile: Dockerfile
         volumes:
             - $PWD:/app:cached
-        restart: on-failure
-        entrypoint: /bin/zsh
+        restart: always
         stdin_open: true
         tty: true
         networks: ['app-network']
