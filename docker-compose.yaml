@@ -40,9 +40,9 @@ services:
             - DATABASE_URL=postgres://postgres:postgres@db:5432/natrium
             - REDIS_HOST=redis
             - GOPRIVATE=github.com/appditto
-            - RPC_URL=https://api.raione.cc/api
+            - RPC_URL=http://localhost:7076
             - WORK_URL=https://api.raione.cc/api
-            - NODE_WS_URL=wss://ws.raione.cc/ws
+            - NODE_WS_URL=ws://localhost:7078
         ports:
             - '3003:3000'
         build:
