@@ -80,7 +80,7 @@ type DolarTodayResponse struct {
 		Trmfactorcash float64 `json:"trmfactorcash"`
 	} `json:"USDCOL"`
 	Eurusd struct {
-		Rate int `json:"rate"`
+		Rate float64 `json:"rate"`
 	} `json:"EURUSD"`
 	Bcv struct {
 		Fecha     string `json:"fecha"`

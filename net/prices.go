@@ -93,12 +93,34 @@ func UpdateDolarSiPrice() error {
 	return nil
 }
 
+type Market struct {
+	Key string  `json:"key"` 
+	MidPrice  float64  `json:"midPrice"`
+}
 func UpdateNanoCoingeckoPrices() error {
 	klog.Info("Updating nano prices\n")
 	rawResp, err := MakeGetRequest(config.NANO_CG_URL)
 	if err != nil {
 		return err
 	}
+
+	rawRespXDG, err := MakeGetRequest(config.XDG_PRICE_URL)
+	if err != nil {
+		return err
+	}
+	var markets []Market
+	if err := json.Unmarshal([]byte(rawRespXDG), &markets); err != nil {
+		klog.Errorf("Error unmarshalling nanswap response %v", err)
+		return err
+	}
+	var midPriceXDG float64
+	for _, market := range markets {
+		if (market.Key == "XRO/XNO"){
+			midPriceXDG = market.MidPrice
+		}
+	}
+	fmt.Printf("XDG Mid Price: %f\n", midPriceXDG)
+
 	var cgResp models.CoingeckoResponse
 	if err := json.Unmarshal(rawResp, &cgResp); err != nil {
 		klog.Errorf("Error unmarshalling coingecko response %v", err)
@@ -108,8 +130,14 @@ func UpdateNanoCoingeckoPrices() error {
 	for _, currency := range CurrencyList {
 		data_name := strings.ToLower(currency)
 		if val, ok := cgResp.MarketData.CurrentPrice[data_name]; ok {
-			fmt.Printf("%s %f\n", "Coingecko NANO-"+currency, val)
-			database.GetRedisDB().Hset("prices", "coingecko:nano-"+data_name, val)
+			if data_name == "btc" {
+				fmt.Printf("%s %f\n", "Coingecko NANO-"+currency, midPriceXDG)
+				database.GetRedisDB().Hset("prices", "coingecko:nano-"+data_name, midPriceXDG) // btcPrice is the xdg price in nano
+				} else {
+					val := val * midPriceXDG 
+					fmt.Printf("%s %f\n", "Coingecko NANO-"+currency, val)
+					database.GetRedisDB().Hset("prices", "coingecko:nano-"+data_name, val)
+			}
 		} else {
 			klog.Errorf("Error getting coingecko price for %s", data_name)
 		}
@@ -135,7 +163,7 @@ func UpdateNanoCoingeckoPrices() error {
 		klog.Errorf("Error parsing coingecko price for nano-ves %s", err)
 		return err
 	}
-	convertedves := usdPriceFloat * bolivarPriceFloat
+	convertedves := usdPriceFloat * bolivarPriceFloat * midPriceXDG
 	if err := database.GetRedisDB().Hset("prices", "coingecko:nano-ves", convertedves); err != nil {
 		klog.Errorf("Error setting coingecko price for nano-ves %s", err)
 		return err
@@ -153,7 +181,7 @@ func UpdateNanoCoingeckoPrices() error {
 		klog.Errorf("Error parsing coingecko price for nano-ves %s", err)
 		return err
 	}
-	convertedars := usdPriceFloat * arsPriceFloat
+	convertedars := usdPriceFloat * arsPriceFloat * midPriceXDG
 	if err := database.GetRedisDB().Hset("prices", "coingecko:nano-ars", convertedars); err != nil {
 		klog.Errorf("Error setting coingecko price for nano-ves %s", err)
 		return err
