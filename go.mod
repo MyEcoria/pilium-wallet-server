@@ -1,4 +1,4 @@
-module github.com/MyEcoria/pilium-wallet-server
+module github.com/appditto/natrium-wallet-server
 
 go 1.19
 

@@ -279,31 +279,3 @@ func UpdateBananoCoingeckoPrices() error {
 
 	return nil
 }
-
-func getNanswapPrices() (float64, error) {
-	rawRespXDG, err := MakeGetRequest(config.XDG_PRICE_URL)
-	if err != nil {
-		klog.Errorf("Error making GET request to Nanswap: %v", err)
-		return 0, err
-	}
-
-	var markets []Market
-	if err := json.Unmarshal([]byte(rawRespXDG), &markets); err != nil {
-		klog.Errorf("Error unmarshalling Nanswap response: %v", err)
-		return 0, err
-	}
-
-	var midPriceXDG float64
-	for _, market := range markets {
-		if market.Key == "XRO/XNO" {
-			midPriceXDG = market.MidPrice
-			break
-		}
-	}
-
-	if midPriceXDG == 0 {
-		return 0, fmt.Errorf("Market 'XRO/XNO' not found in Nanswap response")
-	}
-
-	return midPriceXDG, nil
-}
