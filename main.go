@@ -15,7 +15,7 @@ import (
 	"github.com/appditto/natrium-wallet-server/database"
 	"github.com/appditto/natrium-wallet-server/gql"
 	"github.com/appditto/natrium-wallet-server/models"
-	"github.com/appditto/natrium-wallet-server/net"
+	"github.com/MyEcoria/pilium-wallet-server/net"
 	"github.com/appditto/natrium-wallet-server/repository"
 	"github.com/appditto/natrium-wallet-server/utils"
 	"github.com/appleboy/go-fcm"
